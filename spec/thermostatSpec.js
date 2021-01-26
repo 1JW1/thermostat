@@ -28,8 +28,8 @@ describe("thermostat", function() {
             });
 
             it("If power saving mode is off, the maximum temperature is 32 degrees", function() {
-                return this.powersave = false;
-                expect(function() {thermostat.increase(13)}).toThrow(new Error("Max temp is 32 degrees in power save mode!"));
+                thermostat.powersave = false;
+                expect(function() {thermostat.increase(13)}).toThrow(new Error("Max temp is 32 degrees when power save mode is off!"));
                 });
 
                 it("Power saving mode is on by default but it can also be turned off", function() {
@@ -42,19 +42,21 @@ describe("thermostat", function() {
                         expect(thermostat.temperature).toBe(20);
                         });
 
-                        it("You can ask about the thermostat's current energy usage", function() {
-                            return this.powersave = false;
-                            
+                        it("You can ask about the thermostat's current energy usage (< 18 is low-usage)", function() {
                             thermostat.decrease(3)
-                            thermostat.usage()
-                            thermostat.increase(8)
-                            thermostat.usage()
-                            thermostat.increase(1)
-
-                            expect(thermostat.temperature = 17).toBe("Low-usage.");
-                            expect(thermostat.temperature = 25).toBe("Medium-usage.");
-                            expect(thermostat.temperature = 26).toBe("High-usage.");
+                            expect(thermostat.usage()).toEqual("Low-usage.");
                             });
+
+                            it("You can ask about the thermostat's current energy usage (<= 25 is medium-usage)", function() {
+                                thermostat.increase(4)
+                                expect(thermostat.usage()).toBe("Medium-usage.");
+                                });
+
+                                it("You can ask about the thermostat's current energy usage (anything else is high-usage)", function() {
+                                    thermostat.powersave = false;
+                                    thermostat.increase(7)
+                                    expect(thermostat.usage()).toBe("High-usage.");
+                                    });
 
                             it("increases the value of temperature by 1", function() {
                                 thermostat.increase()

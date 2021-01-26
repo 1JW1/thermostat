@@ -2,6 +2,8 @@ class Thermostat {
     constructor() {
         this.temperature = 20,
         this.powersave = true
+        this.maxLimitPsmOn = 25;
+        this.maxLimitPsmOff = 32;
     }
 
    temp() { 
@@ -10,10 +12,11 @@ class Thermostat {
 
     increase(number = 1) {
         this.temperature += number
-        if (this.powersave = true && this.temperature > 25) {
+        if (this.temperature > this.maxLimitPsmOn && this.powersave == true) {
             throw new Error("Max temp is 25 degrees in power save mode!")
-        } else if (this.powersave = false && this.temperature > 32) {
-            throw new Error("Max temp is 32 degrees in power save mode!") }
+        } else if (this.temperature > this.maxLimitPsmOff && this.powersave == false) {
+            throw new Error("Max temp is 32 degrees when power save mode is off!") 
+        }
         }
 
     decrease(number = 1) {
@@ -32,11 +35,11 @@ class Thermostat {
     }
 
     usage() {
-        if (this.temperature < 18) {
-            "Low-usage."
+        if (this.temperature <= 18) {
+            return "Low-usage."
         } else if (this.temperature <= 25) {
-            "Medium-usage."
-        } else (this.temperature >= 26 & this.powersave == false)
-            "High-usage."
+            return "Medium-usage."
+        } else (this.temperature >= 26 & this.powersave === false)
+            return "High-usage."
     }
 } 
